@@ -1,0 +1,73 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.yml — local development stack
+#
+# Services:
+#   qdrant   — vector DB, persists data to ./qdrant_storage
+#   api      — FastAPI face-match service, hot-reload for dev
+#
+# Usage:
+#   docker compose up          # start both services
+#   docker compose up --build  # rebuild API image (after code changes)
+#   docker compose down -v     # stop + delete volumes (resets Qdrant)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Qdrant vector database ──────────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:v1.9.2
+    container_name: face_match_qdrant
+    ports:
+      - "6333:6333"     # REST API
+      - "6334:6334"     # gRPC (not used by our client, but handy for Qdrant Web UI)
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__LOG_LEVEL: INFO
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI service ─────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: face_match_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    environment:
+      # Qdrant — use service name "qdrant" as hostname inside docker network
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ""
+
+      # InsightFace — model pack was pre-baked during docker build
+      INSIGHTFACE_MODEL_PACK: buffalo_l
+      INSIGHTFACE_MODEL_DIR: /tmp/insightface_models
+      DET_SIZE: 640
+
+      # Matching
+      MATCH_THRESHOLD: 0.35
+      HNSW_EF_SEARCH: 128
+      TOP_K: 1
+
+      LOG_LEVEL: info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  qdrant_data:
+    driver: local

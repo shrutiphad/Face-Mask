@@ -1,0 +1,36 @@
+# fastapi
+# uvicorn[standard]
+# python-multipart
+# qdrant-client
+# insightface
+# onnxruntime
+# opencv-python-headless
+# numpy
+# scikit-learn
+# pillow
+
+# ── Web framework ──────────────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+
+
+insightface==0.7.3
+onnxruntime==1.18.0
+opencv-python-headless==4.9.0.80
+numpy==1.26.4
+Pillow==10.3.0
+
+# ── Vector database ────────────────────────────────────────────────────────────
+qdrant-client==1.9.1
+
+
+scikit-learn==1.5.0
+
+# ── Config / env ───────────────────────────────────────────────────────────────
+pydantic-settings==2.2.1
+python-dotenv==1.0.1
+
+# ── Scripts + tests ────────────────────────────────────────────────────────────
+httpx==0.27.0
+pytest==8.2.2
