@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     collection_name: str = "faces"
 
 
-    insightface_model_pack: str = "buffalo_l"
+    insightface_model_pack: str = "buffalo_s"
 
     # Where InsightFace stores downloaded model files
     insightface_model_dir: str = "/tmp/insightface_models"
