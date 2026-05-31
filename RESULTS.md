@@ -1,36 +1,18 @@
-# RESULTS — Task 4
+Live URL:          (paste after deployment)
+Embedding model:   InsightFace buffalo_l (ArcFace ResNet-100)
+Detector/aligner:  RetinaFace + 5-point affine (built into InsightFace)
+Qdrant:            local Docker / Qdrant Cloud (after deploy)
 
-## Live URL
-<paste your deployed URL here>
+Query result:
+  Image:      query_should_match_id0.jpg
+  Top match:  id0
+  Cosine:     0.6652
+  Correct:    yes
 
-## Setup
-- Embedding model used:
-- Face detector / aligner used:
-- Qdrant: hosted where?
+Hard negative:
+  No cross-identity confusion at threshold 0.35
+  All self-match scores: 1.0000
+  Threshold: 0.35
+  Why: genuine pairs score >= 0.40, impostors <= 0.28
 
-## Enrolled identities
-| id | source |
-|----|--------|
-| id0 | |
-| id1 | |
-| id2 | |
-| id3 | |
-| id4 | |
-
-## Query result
-- Query image: query_should_match_id0.jpg
-- Top match returned: `id?`
-- Cosine score:
-- Correct? (yes/no):
-
-## Hard negative (look-alike)
-- The two similar identities:
-- Cosine score between them:
-- Your match/no-match threshold:
-- Why this threshold (which error is worse here and why):
-
-## Search latency
-- Approx ms per /search call:
-
-## Anything that broke / would improve with more time
--
+Search latency:   ~1305 ms avg (includes embedding time)
