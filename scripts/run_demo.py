@@ -9,6 +9,19 @@ THRESHOLD = 0.35
 SAMPLE    = Path(__file__).parent.parent / "sample"
 
 
+# def post_search(client, img_path):
+#     with open(img_path, "rb") as f:
+#         t0 = time.perf_counter()
+#         r  = client.post(
+#             "/search",
+#             files={"image": (img_path.name, f, "image/jpeg")},
+#             timeout=120.0,
+#         )
+#         wall_ms = (time.perf_counter() - t0) * 1000
+#     data = r.json()
+#     data["_wall_ms"] = round(wall_ms, 1)
+#     return data
+
 def post_search(client, img_path):
     with open(img_path, "rb") as f:
         t0 = time.perf_counter()
@@ -18,10 +31,13 @@ def post_search(client, img_path):
             timeout=120.0,
         )
         wall_ms = (time.perf_counter() - t0) * 1000
+    
+    print(f"  HTTP status: {r.status_code}")
+    print(f"  Response: {r.text[:200]}")
+    
     data = r.json()
     data["_wall_ms"] = round(wall_ms, 1)
     return data
-
 
 def main(base_url):
     print(f"\n{'='*60}")
