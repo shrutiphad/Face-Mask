@@ -1,4 +1,4 @@
-# Task 4 — Face Match + Vector Search (starter)
+ Face Match + Vector Search (starter)
 
 Fill in the two endpoints in `app/main.py`. Deploy it live. Report numbers in `RESULTS.md`.
 
